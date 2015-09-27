@@ -14,7 +14,6 @@ import { devTools } from 'redux-devtools';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import createHistory from 'history/lib/createBrowserHistory';
 
-@connect(state => ({ routerState: state.router }))
 class App extends Component {
   static propTypes = {
     children: PropTypes.node
@@ -67,6 +66,22 @@ class Child extends Component {
   }
 }
 
+@connect(state => ({ childId: state.router.params.id }))
+class ChildWithId extends Component {
+  static propTypes = {
+    childId: PropTypes.string
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>Child with id</h2>
+        {this.props.childId}
+      </div>
+    );
+  }
+}
+
 const reducer = combineReducers({
   router: routerStateReducer
 });
@@ -85,7 +100,7 @@ class Root extends Component {
             <Route path="/" component={App}>
               <Route path="parent" component={Parent}>
                 <Route path="child" component={Child} />
-                <Route path="child/:id" component={Child} />
+                <Route path="child/:id" component={ChildWithId} />
               </Route>
             </Route>
           </ReduxRouter>
